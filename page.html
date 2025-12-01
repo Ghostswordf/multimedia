@@ -12,19 +12,49 @@
   <script>
     const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
     console.log('Manifest URI:', manifestUri);  // ← Check this logs correctly
-    document.addEventListener('shaka-ui-loaded', async () => {
-      console.log('Shaka UI loaded');  // ← Confirm this fires
+
+    // 1. Install polyfills and check browser support FIRST
+    shaka.polyfill.installAll();
+  
+    if (shaka.Player.isBrowserSupported()) {
+      console.log('Browser supported');
+    } else {
+      console.error('Browser not supported!');
+      return;
+    }
+    
+    // 2. Wait for DOM ready, THEN initialize
+    async function initApp() {
+      console.log('Initializing app...');
+    
+      // Find video element
       const video = document.getElementById('video');
-      const ui = video.ui;
-      const player = ui.getControls().getPlayer();
+      console.log('Video element found:', video);
+      
+      // 3. Create player manually (reliable method)
+      const player = new shaka.Player(video);
+      video.poster = ''; // Clear poster
+    
+      // 4. Get UI controls
+      const container = video.parentElement;
+      const ui = new shaka.ui.Overlay(player, container, video);
+    
+      // 5. Load manifest
       try {
-        console.log('Attempting to load manifest...');
+        console.log('Loading manifest:', manifestUri);
         await player.load(manifestUri);
-        console.log('Loaded!');
+        console.log('Loaded successfully!');
       } catch (e) {
-        console.error(e);
+        console.error('Load failed:', e);
       }
-    });
+    }
+  
+    // 6. Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
   </script>
 </body>
 </html>
