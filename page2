@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Progressive Streaming</title>
+  <head>
+
+  <body>
+    <h2> Progressive Streaming </h2>
+    
+    <video controls autoplay style="width:100%">
+      <source src="lab4_progressive.mp4" type="video/mp4">
+    </video>
+  </body>
+</html>
