@@ -9,51 +9,32 @@
   <div data-shaka-player-container style="max-width:40em">
     <video data-shaka-player autoplay id="video" style="width:100%"></video>
   </div>
-  <script>
-    const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
-    console.log('Manifest URI:', manifestUri);  // ← Check this logs correctly
 
-    // 1. Install polyfills and check browser support FIRST
+  <script>
+    console.log('Secure context?', window.isSecureContext);
+    console.log('MSE supported?', !!window.MediaSource);
+    
+    const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
+    
     shaka.polyfill.installAll();
-  
+    
+    console.log('Shaka browser support:', shaka.Player.isBrowserSupported());
+    console.log('Detailed support:', shaka.Player.probeSupport());
+    
     if (shaka.Player.isBrowserSupported()) {
-      console.log('Browser supported');
+      // Your original code here
+      document.addEventListener('shaka-ui-loaded', async () => {
+        const video = document.getElementById('video');
+        const player = video.ui.getControls().getPlayer();
+        try {
+          await player.load(manifestUri);
+          console.log('Loaded!');
+        } catch(e) {
+          console.error(e);
+        }
+      });
     } else {
-      console.error('Browser not supported!');
-      return;
-    }
-    
-    // 2. Wait for DOM ready, THEN initialize
-    async function initApp() {
-      console.log('Initializing app...');
-    
-      // Find video element
-      const video = document.getElementById('video');
-      console.log('Video element found:', video);
-      
-      // 3. Create player manually (reliable method)
-      const player = new shaka.Player(video);
-      video.poster = ''; // Clear poster
-    
-      // 4. Get UI controls
-      const container = video.parentElement;
-      const ui = new shaka.ui.Overlay(player, container, video);
-    
-      // 5. Load manifest
-      try {
-        console.log('Loading manifest:', manifestUri);
-        await player.load(manifestUri);
-        console.log('Loaded successfully!');
-      } catch (e) {
-        console.error('Load failed:', e);
-      }
-    }
-  
-    // 6. Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-      initApp();
+      document.body.innerHTML += '<p style="color:red">Browser not supported! Use Chrome/Firefox latest or serve via localhost.</p>';
     }
   </script>
 </body>
