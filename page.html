@@ -9,36 +9,22 @@
   <div data-shaka-player-container style="max-width:40em">
     <video data-shaka-player autoplay id="video" style="width:100%"></video>
   </div>
-
   <script>
-    async function init() {
-      // Use OFFICIAL Shaka demo (guaranteed to work)
-      const manifestUri = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
-      
+    const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
+    console.log('Manifest URI:', manifestUri);  // ← Check this logs correctly
+    document.addEventListener('shaka-ui-loaded', async () => {
+      console.log('Shaka UI loaded');  // ← Confirm this fires
       const video = document.getElementById('video');
-      const container = document.getElementById('container');
-      
-      // Create player
-      const player = new shaka.Player(video);
-      const ui = new shaka.ui.Overlay(player, container, video);
-      
+      const ui = video.ui;
+      const player = ui.getControls().getPlayer();
       try {
+        console.log('Attempting to load manifest...');
         await player.load(manifestUri);
-        console.log('✅ LOADED SUCCESSFULLY!');
+        console.log('Loaded!');
       } catch (e) {
-        console.error('❌ Load failed:', e);
+        console.error(e);
       }
-    }
-    
-    // Start when ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    });
   </script>
-
-   // const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
-    
 </body>
 </html>
