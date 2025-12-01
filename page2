@@ -3,7 +3,6 @@
   <head>
     <title>Progressive Streaming</title>
   <head>
-
   <body>
     <h2> Progressive Streaming </h2>
     <video controls autoplay style="width:100%">
