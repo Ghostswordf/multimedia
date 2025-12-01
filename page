@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudfare.com/ajax/libs/shaka-player/4.3.2/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudfare.com/ajax/libs/shaka-player/4.3.2/controls.min.css">
+  <head>
+
+  <body>
+    <h2> AVC Adaptive Streaming </h2>
+
+    <div data-shaka-player-container style="max-width: 40em;">
+      <video data-shaka-player autoplay id="video" style="width:100%"></video>
+    </div>
+
+    <script>
+      const manifestUri = '';
+
+      document.addEventListener('shaka-ui-loaded',async () =>{
+        const video = document.getElementById('video');
+        const ui = video.ui;
+        const player = ui.getControls().getPlayer();
+
+        try{
+          await player.load(manifestUri);
+          console.log('Loaded!');
+        }
+        catch(e){
+          console.error(e);
+        }
+      });
+    </script>
+  </body>
+</html>
