@@ -11,11 +11,14 @@
   </div>
   <script>
     const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
+    console.log('Manifest URI:', manifestUri);  // ← Check this logs correctly
     document.addEventListener('shaka-ui-loaded', async () => {
+      console.log('Shaka UI loaded');  // ← Confirm this fires
       const video = document.getElementById('video');
       const ui = video.ui;
       const player = ui.getControls().getPlayer();
       try {
+        console.log('Attempting to load manifest...');
         await player.load(manifestUri);
         console.log('Loaded!');
       } catch (e) {
