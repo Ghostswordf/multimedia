@@ -11,31 +11,34 @@
   </div>
 
   <script>
-    console.log('Secure context?', window.isSecureContext);
-    console.log('MSE supported?', !!window.MediaSource);
+    async function init() {
+      // Use OFFICIAL Shaka demo (guaranteed to work)
+      const manifestUri = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
+      
+      const video = document.getElementById('video');
+      const container = document.getElementById('container');
+      
+      // Create player
+      const player = new shaka.Player(video);
+      const ui = new shaka.ui.Overlay(player, container, video);
+      
+      try {
+        await player.load(manifestUri);
+        console.log('✅ LOADED SUCCESSFULLY!');
+      } catch (e) {
+        console.error('❌ Load failed:', e);
+      }
+    }
     
-    const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
-    
-    shaka.polyfill.installAll();
-    
-    console.log('Shaka browser support:', shaka.Player.isBrowserSupported());
-    console.log('Detailed support:', shaka.Player.probeSupport());
-    
-    if (shaka.Player.isBrowserSupported()) {
-      // Your original code here
-      document.addEventListener('shaka-ui-loaded', async () => {
-        const video = document.getElementById('video');
-        const player = video.ui.getControls().getPlayer();
-        try {
-          await player.load(manifestUri);
-          console.log('Loaded!');
-        } catch(e) {
-          console.error(e);
-        }
-      });
+    // Start when ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
     } else {
-      document.body.innerHTML += '<p style="color:red">Browser not supported! Use Chrome/Firefox latest or serve via localhost.</p>';
+      init();
     }
   </script>
+
+   // const manifestUri = 'https://raw.githubusercontent.com/Ghostswordf/multimedia/main/manifestlab4.mpd';
+    
 </body>
 </html>
